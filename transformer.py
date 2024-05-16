@@ -7,6 +7,7 @@ from torch.autograd import Variable
 from hyperparameter import hyperparameter
 hp = hyperparameter()
 
+# 定义位置编码类
 class PositionalEncoding(nn.Module):
 
 
@@ -27,6 +28,7 @@ class PositionalEncoding(nn.Module):
         return self.dropout(x)
 
 
+# 定义注意力函数
 def attention(query, key, value, mask=None, dropout=None):
 
     d_k = query.size(-1)
@@ -36,7 +38,7 @@ def attention(query, key, value, mask=None, dropout=None):
         p_attn = dropout(p_attn)
     return torch.matmul(p_attn, value), p_attn
 
-
+# 定义多头注意力类
 class MultiHeadedAttention(nn.Module):
     def __init__(self, h, d_model, dropout=0.1):
 
@@ -62,6 +64,7 @@ class MultiHeadedAttention(nn.Module):
         return self.linears[-1](x)
 
 
+# 定义生成器类
 class Generator(nn.Module):
 
     def __init__(self, d_model, vocab):
@@ -77,6 +80,7 @@ def clones(module, N):
     return nn.ModuleList([copy.deepcopy(module) for _ in range(N)])
 
 
+# 定义LayerNorm类
 class LayerNorm(nn.Module):
 
 
@@ -92,6 +96,7 @@ class LayerNorm(nn.Module):
         return self.a_2 * (x - mean) / (std + self.eps) + self.b_2
 
 
+# 定义旁路层连接类
 class SublayerConnection(nn.Module):
 
     def __init__(self, size, dropout):
@@ -104,6 +109,7 @@ class SublayerConnection(nn.Module):
         return x + self.dropout(sublayer(self.norm(x)))
 
 
+# 定义编码器层类
 class EncoderLayer(nn.Module):
 
 
@@ -120,6 +126,7 @@ class EncoderLayer(nn.Module):
         return self.sublayer[1](x, self.feed_forward)
 
 
+# 定义编码器类
 class Encoder(nn.Module):
 
 
@@ -135,6 +142,7 @@ class Encoder(nn.Module):
         return self.norm(x)
 
 
+# 定义前馈层类
 class PositionwiseFeedForward(nn.Module):
 
 
@@ -148,6 +156,7 @@ class PositionwiseFeedForward(nn.Module):
         return self.w_2(self.dropout(F.relu(self.w_1(x))))
 
 
+# 定义嵌入类
 class Embeddings(nn.Module):
 
     def __init__(self, d_model, vocab):
@@ -158,6 +167,7 @@ class Embeddings(nn.Module):
     def forward(self, x):
         return self.lut(x) * math.sqrt(self.d_model)
 
+# 定义Transformer模型类
 class transformer(nn.Module):
     def __init__(self, src_vocab, prob_vocab, N=hp.n_layers, d_model=hp.pf_dim, d_ff=hp.d_ff, h=hp.n_heads, dropout=hp.dropout):
         super(transformer, self).__init__()

@@ -1,6 +1,6 @@
 class hyperparameter():
     def __init__(self):
-        self.model_name = "DrugBank"
+        self.model_name = "KIBA"
         self.hid_dim = 64
         self.n_layers = 3
         self.n_heads = 8
